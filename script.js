@@ -49,6 +49,13 @@ const joinBtn      = document.querySelector('#join-btn');
 const actionSection = document.querySelector('#action-section');
 const add3Btn      = document.querySelector('#add-set-3');
 const add5Btn      = document.querySelector('#add-set-5');
+const toggleManageBtn = document.querySelector('#toggle-manage');
+
+const manageSection = document.querySelector('#manage-section');
+const removeLastSetBtn = document.querySelector('#remove-last-set');
+const userSelect = document.querySelector('#manage-user-select');
+const subtractDrinkBtn = document.querySelector('#subtract-drink');
+const removeUserBtn = document.querySelector('#remove-user');
 
 const usersSection = document.querySelector('#users-section');
 const usersContainer = document.querySelector('#users-container');
@@ -113,6 +120,41 @@ joinBtn.addEventListener('click', () => {
 // 2) Add Set Buttons
 add3Btn.addEventListener('click', () => handleAddSet(3));
 add5Btn.addEventListener('click', () => handleAddSet(5));
+toggleManageBtn.addEventListener('click', () => {
+        manageSection.classList.toggle('hidden');
+        updateManageSelect();
+});
+
+removeLastSetBtn.addEventListener('click', () => {
+        if (session.sets.length === 0) return;
+        const removed = session.sets.shift();
+        log(`Removed last set of ${removed.type}`);
+        saveSession();
+        updateUI();
+});
+
+subtractDrinkBtn.addEventListener('click', () => {
+        const name = userSelect.value;
+        if (!name) return;
+        if (session.users[name] > 0) {
+                session.users[name] -= 1;
+                log(`Corrected drink for ${name}`);
+                saveSession();
+                updateUI();
+        }
+});
+
+removeUserBtn.addEventListener('click', () => {
+        const name = userSelect.value;
+        if (!name) return;
+        if (confirm(`Remove user ${name}?`)) {
+                delete session.users[name];
+                log(`${name} was removed`);
+                saveSession();
+                updateUI();
+                updateManageSelect();
+        }
+});
 
 function handleAddSet(size) {
 	const now = Date.now();
@@ -136,10 +178,10 @@ resetBtn.addEventListener('click', () => {
 
 /* ------------------ Dynamic User Drink Buttons ------------------ */
 function createUserButtons() {
-	usersContainer.innerHTML = ''; // Clear
-	for (const [name, count] of Object.entries(session.users)) {
-		const btn = document.createElement('button');
-		btn.textContent = `${name} (${count})`;
+        usersContainer.innerHTML = ''; // Clear
+        for (const [name, count] of Object.entries(session.users)) {
+                const btn = document.createElement('button');
+                btn.textContent = `${name} (${count})`;
 		btn.addEventListener('click', () => {
 			session.users[name] += 1;
 			log(`${name} drank one!`);
@@ -147,8 +189,22 @@ function createUserButtons() {
 			updateUI();
 			triggerAnimation(btn);
 		});
-		usersContainer.appendChild(btn);
-	}
+                usersContainer.appendChild(btn);
+        }
+}
+
+function updateManageSelect() {
+        userSelect.innerHTML = '';
+        const opt = document.createElement('option');
+        opt.value = '';
+        opt.textContent = 'Select User';
+        userSelect.appendChild(opt);
+        Object.keys(session.users).forEach(name => {
+                const o = document.createElement('option');
+                o.value = name;
+                o.textContent = name;
+                userSelect.appendChild(o);
+        });
 }
 
 /* ------------------ Leaderboard & Stats ------------------ */
@@ -217,14 +273,16 @@ function updateUI() {
 	// Toggle hidden sections based on whether we have any users
 	const hasUsers = Object.keys(session.users).length > 0;
 
-	[ actionSection, usersSection, dashboardSection,
-	  achievementsSection, logSection, resetFooter
-	].forEach(el => el.classList.toggle('hidden', !hasUsers));
+        [ actionSection, usersSection, dashboardSection,
+          achievementsSection, logSection, resetFooter,
+          manageSection
+        ].forEach(el => el.classList.toggle('hidden', !hasUsers));
 
-	createUserButtons();
-	updateDashboard();
-	checkAchievements();
-	updateLog();
+        createUserButtons();
+        updateManageSelect();
+        updateDashboard();
+        checkAchievements();
+        updateLog();
 }
 
 /* ------------------ Tiny Animation Helper ------------------ */
