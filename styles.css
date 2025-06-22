@@ -57,6 +57,12 @@ button:hover { filter: brightness(1.1); }
 button:active { transform: scale(0.96); }
 button.danger { background: var(--danger); color: var(--text-light); }
 
+/* Smaller buttons in manage menu */
+#manage-section button {
+        padding: 0.6rem 0.9rem;
+        font-size: 0.85rem;
+}
+
 /* Hidden helper */
 .hidden { display: none; }
 
