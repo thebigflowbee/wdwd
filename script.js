@@ -9,12 +9,15 @@ const FIVE_MIN   = 5 * 60 * 1000;
 const DAY_MS     = 24 * 60 * 60 * 1000;
 
 let session = {
-	startTime: Date.now(),
-	users: {},           // { nickname: drinkCount }
-	sets: [],            // [{type:3|5, time:ms}]
-	log: [],             // String messages
-	achievements: []     // Names already unlocked
+        startTime: Date.now(),
+        users: {},           // { nickname: drinkCount }
+        sets: [],            // [{type:3|5, time:ms}]
+        log: [],             // String messages
+        achievements: []     // Names already unlocked
 };
+
+// Tracks whether the manage panel is visible
+let manageVisible = false;
 
 /* ------------------ Helper Functions ------------------ */
 function saveSession() {
@@ -73,6 +76,7 @@ const logList    = document.querySelector('#log-list');
 
 const resetBtn   = document.querySelector('#reset-btn');
 const resetFooter = document.querySelector('#reset-footer');
+const manageFooter = document.querySelector('#manage-footer');
 
 /* ------------------ Achievements Config ------------------ */
 const ACHIEVEMENTS = [
@@ -121,8 +125,8 @@ joinBtn.addEventListener('click', () => {
 add3Btn.addEventListener('click', () => handleAddSet(3));
 add5Btn.addEventListener('click', () => handleAddSet(5));
 toggleManageBtn.addEventListener('click', () => {
-        manageSection.classList.toggle('hidden');
-        updateManageSelect();
+        manageVisible = !manageVisible;
+        updateUI();
 });
 
 removeLastSetBtn.addEventListener('click', () => {
@@ -141,8 +145,11 @@ subtractDrinkBtn.addEventListener('click', () => {
                 log(`Corrected drink for ${name}`);
                 saveSession();
                 updateUI();
+                updateManageState();
         }
 });
+
+userSelect.addEventListener('change', updateManageState);
 
 removeUserBtn.addEventListener('click', () => {
         const name = userSelect.value;
@@ -153,6 +160,7 @@ removeUserBtn.addEventListener('click', () => {
                 saveSession();
                 updateUI();
                 updateManageSelect();
+                updateManageState();
         }
 });
 
@@ -164,11 +172,12 @@ function handleAddSet(size) {
 		const sure = confirm('Are you sure this is a separate set?');
 		if (!sure) return;
 	}
-	session.sets.unshift({ type: size, time: now });
-	log(`New set ordered: ${size === 3 ? '3‑Pint' : '5‑Glass'} Set`);
-	triggerAnimation(add3Btn); // quick pop on any button
-	saveSession();
-	updateUI();
+        session.sets.unshift({ type: size, time: now });
+        log(`New set ordered: ${size === 3 ? '3‑Pint' : '5‑Glass'} Set`);
+        const sourceBtn = size === 3 ? add3Btn : add5Btn;
+        triggerAnimation(sourceBtn); // quick pop on whichever button was used
+        saveSession();
+        updateUI();
 }
 
 // 3) Reset Button
@@ -182,14 +191,15 @@ function createUserButtons() {
         for (const [name, count] of Object.entries(session.users)) {
                 const btn = document.createElement('button');
                 btn.textContent = `${name} (${count})`;
-		btn.addEventListener('click', () => {
-			session.users[name] += 1;
-			log(`${name} drank one!`);
-			saveSession();
-			updateUI();
-			triggerAnimation(btn);
-		});
+                btn.addEventListener('click', () => {
+                        session.users[name] += 1;
+                        log(`${name} drank one!`);
+                        saveSession();
+                        updateUI();
+                        triggerAnimation(btn);
+                });
                 usersContainer.appendChild(btn);
+                triggerFade(btn);
         }
 }
 
@@ -205,6 +215,14 @@ function updateManageSelect() {
                 o.textContent = name;
                 userSelect.appendChild(o);
         });
+        updateManageState();
+}
+
+function updateManageState() {
+        const name = userSelect.value;
+        const count = session.users[name] || 0;
+        subtractDrinkBtn.disabled = !name || count === 0;
+        removeUserBtn.disabled = !name;
 }
 
 /* ------------------ Leaderboard & Stats ------------------ */
@@ -270,13 +288,21 @@ function updateLog() {
 
 /* ------------------ UI Refresh ------------------ */
 function updateUI() {
-	// Toggle hidden sections based on whether we have any users
-	const hasUsers = Object.keys(session.users).length > 0;
+        // Toggle hidden sections based on whether we have any users
+        const hasUsers = Object.keys(session.users).length > 0;
 
-        [ actionSection, usersSection, dashboardSection,
-          achievementsSection, logSection, resetFooter,
-          manageSection
-        ].forEach(el => el.classList.toggle('hidden', !hasUsers));
+       [ actionSection, usersSection, dashboardSection,
+         achievementsSection, logSection, resetFooter,
+         manageFooter
+       ].forEach(el => el.classList.toggle('hidden', !hasUsers));
+
+        const wasHidden = manageSection.classList.contains('hidden');
+        manageSection.classList.toggle('hidden', !hasUsers || !manageVisible);
+        const nowVisible = !manageSection.classList.contains('hidden');
+        if (nowVisible && wasHidden) {
+                triggerFade(manageSection);
+        }
+        toggleManageBtn.textContent = manageVisible ? '❌ Close Tools' : '🛠️ Tools';
 
         createUserButtons();
         updateManageSelect();
@@ -287,6 +313,11 @@ function updateUI() {
 
 /* ------------------ Tiny Animation Helper ------------------ */
 function triggerAnimation(el) {
-	el.classList.add('pop');
-	setTimeout(() => el.classList.remove('pop'), 600);
+        el.classList.add('pop');
+        setTimeout(() => el.classList.remove('pop'), 600);
+}
+
+function triggerFade(el) {
+        el.classList.add('fade-up');
+        el.addEventListener('animationend', () => el.classList.remove('fade-up'), { once: true });
 }

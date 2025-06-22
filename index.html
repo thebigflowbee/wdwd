@@ -5,8 +5,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>WDWD – What Did We Drink?</title>
 
-	<!-- Link to the external stylesheet -->
-	<link rel="stylesheet" href="styles.css" />
+        <!-- External styles & fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 	<header>
@@ -29,8 +32,7 @@
         <section id="action-section" class="hidden">
                 <h2>Order Sets</h2>
                 <button id="add-set-3">➕ Add 3‑Pint Set</button>
-                <button id="add-set-5">➕ Add 5‑Glass Set</button>
-                <button id="toggle-manage">⚙ Manage</button>
+               <button id="add-set-5">➕ Add 5‑Glass Set</button>
         </section>
 
 
@@ -75,16 +77,21 @@
                 <ul id="log-list"><!-- Filled dynamically --></ul>
         </section>
 
-        <!-- ========== MANAGE MENU ========== -->
-        <section id="manage-section" class="hidden">
-                <h2>Manage Session</h2>
-                <button id="remove-last-set" class="danger">Remove Last Set</button>
-                <div>
-                        <select id="manage-user-select"></select>
-                </div>
-                <button id="subtract-drink" class="danger">Subtract Drink</button>
-                <button id="remove-user" class="danger">Remove User</button>
-        </section>
+       <!-- ========== MANAGE MENU ========== -->
+       <section id="manage-section" class="hidden">
+               <h2>Management Tools</h2>
+               <p class="note manage-note">Select a user below to subtract a drink or remove them.</p>
+               <button id="remove-last-set" class="danger">Remove Last Set</button>
+               <div>
+                       <select id="manage-user-select"></select>
+               </div>
+               <button id="subtract-drink" class="danger" disabled>Subtract Drink</button>
+               <button id="remove-user" class="danger" disabled>Remove User</button>
+       </section>
+
+       <footer id="manage-footer" class="hidden">
+               <button id="toggle-manage" title="Open management tools">🛠️ Tools</button>
+       </footer>
 
 	<!-- ========== RESET BUTTON ========== -->
 	<footer class="hidden" id="reset-footer">
