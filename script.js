@@ -125,8 +125,6 @@ add3Btn.addEventListener('click', () => handleAddSet(3));
 add5Btn.addEventListener('click', () => handleAddSet(5));
 toggleManageBtn.addEventListener('click', () => {
         manageVisible = !manageVisible;
-        toggleManageBtn.textContent = manageVisible ? '❌ Close Manage' : '⚙ Manage';
-        updateManageSelect();
         updateUI();
 });
 
@@ -146,8 +144,11 @@ subtractDrinkBtn.addEventListener('click', () => {
                 log(`Corrected drink for ${name}`);
                 saveSession();
                 updateUI();
+                updateManageState();
         }
 });
+
+userSelect.addEventListener('change', updateManageState);
 
 removeUserBtn.addEventListener('click', () => {
         const name = userSelect.value;
@@ -158,6 +159,7 @@ removeUserBtn.addEventListener('click', () => {
                 saveSession();
                 updateUI();
                 updateManageSelect();
+                updateManageState();
         }
 });
 
@@ -210,6 +212,14 @@ function updateManageSelect() {
                 o.textContent = name;
                 userSelect.appendChild(o);
         });
+        updateManageState();
+}
+
+function updateManageState() {
+        const name = userSelect.value;
+        const count = session.users[name] || 0;
+        subtractDrinkBtn.disabled = !name || count === 0;
+        removeUserBtn.disabled = !name;
 }
 
 /* ------------------ Leaderboard & Stats ------------------ */
@@ -283,7 +293,7 @@ function updateUI() {
         ].forEach(el => el.classList.toggle('hidden', !hasUsers));
 
         manageSection.classList.toggle('hidden', !hasUsers || !manageVisible);
-        toggleManageBtn.textContent = manageVisible ? '❌ Close Manage' : '⚙ Manage';
+        toggleManageBtn.textContent = manageVisible ? '❌ Close Tools' : '🛠️ Tools';
 
         createUserButtons();
         updateManageSelect();

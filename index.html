@@ -32,8 +32,8 @@
         <section id="action-section" class="hidden">
                 <h2>Order Sets</h2>
                 <button id="add-set-3">➕ Add 3‑Pint Set</button>
-                <button id="add-set-5">➕ Add 5‑Glass Set</button>
-                <button id="toggle-manage">⚙ Manage</button>
+               <button id="add-set-5">➕ Add 5‑Glass Set</button>
+               <button id="toggle-manage" title="Open management tools">🛠️ Tools</button>
         </section>
 
 
@@ -79,15 +79,16 @@
         </section>
 
         <!-- ========== MANAGE MENU ========== -->
-        <section id="manage-section" class="hidden">
-                <h2>Manage Session</h2>
-                <button id="remove-last-set" class="danger">Remove Last Set</button>
-                <div>
-                        <select id="manage-user-select"></select>
-                </div>
-                <button id="subtract-drink" class="danger">Subtract Drink</button>
-                <button id="remove-user" class="danger">Remove User</button>
-        </section>
+       <section id="manage-section" class="hidden">
+               <h2>Management Tools</h2>
+               <p class="note manage-note">Select a user below to subtract a drink or remove them.</p>
+               <button id="remove-last-set" class="danger">Remove Last Set</button>
+               <div>
+                       <select id="manage-user-select"></select>
+               </div>
+               <button id="subtract-drink" class="danger" disabled>Subtract Drink</button>
+               <button id="remove-user" class="danger" disabled>Remove User</button>
+       </section>
 
 	<!-- ========== RESET BUTTON ========== -->
 	<footer class="hidden" id="reset-footer">

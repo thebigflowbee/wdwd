@@ -113,6 +113,12 @@ footer {
 	text-align: center;
 }
 .note { font-size: 0.8rem; color: #555; }
+.manage-note { margin-top: 0; text-align: center; }
+
+button:disabled {
+        opacity: 0.6;
+        cursor: default;
+}
 
 /* Manage Panel */
 #manage-section {
