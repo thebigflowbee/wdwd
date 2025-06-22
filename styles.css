@@ -1,0 +1,115 @@
+/* -------------------------------------------------
+   WDWD – What Did We Drink?
+   Simple, mobile‑first styling
+   ------------------------------------------------- */
+:root {
+	--primary: #ffb400;      /* Amber */
+	--secondary: #222;       /* Dark background */
+	--text-light: #fff;
+	--text-dark: #000;
+	--accent: #00c853;       /* Green for success */
+	--danger: #e53935;       /* Red for reset */
+	--radius: 8px;
+	--shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+	font-size: 16px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+	margin: 0;
+	font-family: system-ui, sans-serif;
+	background: #f7f7f7;
+	color: var(--secondary);
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+header, section, footer {
+	padding: 1rem;
+	max-width: 600px;
+	width: 100%;
+	margin: 0 auto;
+}
+
+h1, h2, h3 {
+	text-align: center;
+	margin-top: 0;
+}
+
+/* Buttons */
+button {
+	display: inline-block;
+	padding: 0.8rem 1.2rem;
+	margin: 0.4rem;
+	border: none;
+	border-radius: var(--radius);
+	background: var(--primary);
+	color: var(--text-dark);
+	font-size: 1rem;
+	font-weight: 600;
+	box-shadow: var(--shadow);
+	cursor: pointer;
+	transition: transform 0.1s ease, filter 0.2s ease;
+}
+button:hover { filter: brightness(1.1); }
+button:active { transform: scale(0.96); }
+button.danger { background: var(--danger); color: var(--text-light); }
+
+/* Hidden helper */
+.hidden { display: none; }
+
+/* Stat Cards */
+.stat-grid {
+	display: flex;
+	gap: 1rem;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+.stat-card {
+	background: var(--primary);
+	border-radius: var(--radius);
+	color: var(--text-dark);
+	padding: 1rem 1.5rem;
+	text-align: center;
+	min-width: 120px;
+	box-shadow: var(--shadow);
+}
+.stat-card p { font-size: 2rem; margin: 0; }
+
+/* Leaderboard Table */
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+th, td {
+	padding: 0.5rem;
+	border-bottom: 1px solid #ddd;
+	text-align: center;
+}
+tr:nth-child(even) { background: #fafafa; }
+
+/* Achievement Animations */
+@keyframes pop {
+	0%   { transform: scale(1); }
+	20%  { transform: scale(1.25); }
+	40%  { transform: scale(0.9); }
+	60%  { transform: scale(1.1); }
+	80%  { transform: scale(0.98); }
+	100% { transform: scale(1); }
+}
+.pop { animation: pop 0.6s ease-out forwards; }
+
+@keyframes slide-in {
+	from { transform: translateY(30px); opacity: 0; }
+	to   { transform: translateY(0);   opacity: 1; }
+}
+.slide-in { animation: slide-in 0.4s ease-out forwards; }
+
+/* Footer */
+footer {
+	margin-top: auto;
+	text-align: center;
+}
+.note { font-size: 0.8rem; color: #555; }
