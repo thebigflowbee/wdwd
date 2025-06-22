@@ -9,12 +9,15 @@ const FIVE_MIN   = 5 * 60 * 1000;
 const DAY_MS     = 24 * 60 * 60 * 1000;
 
 let session = {
-	startTime: Date.now(),
-	users: {},           // { nickname: drinkCount }
-	sets: [],            // [{type:3|5, time:ms}]
-	log: [],             // String messages
-	achievements: []     // Names already unlocked
+        startTime: Date.now(),
+        users: {},           // { nickname: drinkCount }
+        sets: [],            // [{type:3|5, time:ms}]
+        log: [],             // String messages
+        achievements: []     // Names already unlocked
 };
+
+// Tracks whether the manage panel is visible
+let manageVisible = false;
 
 /* ------------------ Helper Functions ------------------ */
 function saveSession() {
@@ -121,8 +124,10 @@ joinBtn.addEventListener('click', () => {
 add3Btn.addEventListener('click', () => handleAddSet(3));
 add5Btn.addEventListener('click', () => handleAddSet(5));
 toggleManageBtn.addEventListener('click', () => {
-        manageSection.classList.toggle('hidden');
+        manageVisible = !manageVisible;
+        toggleManageBtn.textContent = manageVisible ? '❌ Close Manage' : '⚙ Manage';
         updateManageSelect();
+        updateUI();
 });
 
 removeLastSetBtn.addEventListener('click', () => {
@@ -270,13 +275,15 @@ function updateLog() {
 
 /* ------------------ UI Refresh ------------------ */
 function updateUI() {
-	// Toggle hidden sections based on whether we have any users
-	const hasUsers = Object.keys(session.users).length > 0;
+        // Toggle hidden sections based on whether we have any users
+        const hasUsers = Object.keys(session.users).length > 0;
 
         [ actionSection, usersSection, dashboardSection,
-          achievementsSection, logSection, resetFooter,
-          manageSection
+          achievementsSection, logSection, resetFooter
         ].forEach(el => el.classList.toggle('hidden', !hasUsers));
+
+        manageSection.classList.toggle('hidden', !hasUsers || !manageVisible);
+        toggleManageBtn.textContent = manageVisible ? '❌ Close Manage' : '⚙ Manage';
 
         createUserButtons();
         updateManageSelect();
