@@ -17,13 +17,13 @@
 * { box-sizing: border-box; }
 
 body {
-	margin: 0;
-	font-family: system-ui, sans-serif;
-	background: #f7f7f7;
-	color: var(--secondary);
-	display: flex;
-	flex-direction: column;
-	min-height: 100vh;
+        margin: 0;
+        font-family: 'Inter', system-ui, sans-serif;
+        background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+        color: var(--secondary);
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
 }
 
 header, section, footer {
@@ -113,3 +113,26 @@ footer {
 	text-align: center;
 }
 .note { font-size: 0.8rem; color: #555; }
+
+/* Manage Panel */
+#manage-section {
+        border: 2px dashed var(--secondary);
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: var(--radius);
+        margin-top: 1rem;
+        box-shadow: var(--shadow);
+}
+
+select {
+        padding: 0.5rem;
+        border-radius: var(--radius);
+        border: 1px solid #ccc;
+        margin: 0.4rem 0;
+}
+
+#users-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+}
+#users-container button { margin: 0.25rem; }
