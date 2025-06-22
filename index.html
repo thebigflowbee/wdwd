@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>WDWD – What Did We Drink?</title>
+
+	<!-- Link to the external stylesheet -->
+	<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+	<header>
+		<h1>🍻 WDWD – What Did We Drink?</h1>
+	</header>
+
+	<!-- ========== USER JOIN SECTION ========== -->
+	<section id="join-section">
+		<h2>Join the Session</h2>
+		<input
+			type="text"
+			id="nickname-input"
+			placeholder="Enter a nickname"
+			autocomplete="off"
+		/>
+		<button id="join-btn">Join</button>
+	</section>
+
+	<!-- ========== ACTION BUTTONS ========== -->
+	<section id="action-section" class="hidden">
+		<h2>Order Sets</h2>
+		<button id="add-set-3">➕ Add 3‑Pint Set</button>
+		<button id="add-set-5">➕ Add 5‑Glass Set</button>
+	</section>
+
+	<!-- ========== USER DRINK BUTTONS ========== -->
+	<section id="users-section" class="hidden">
+		<h2>Tap Your Name to Log a Drink</h2>
+		<div id="users-container"><!-- Filled dynamically --></div>
+	</section>
+
+	<!-- ========== DASHBOARD ========== -->
+	<section id="dashboard-section" class="hidden">
+		<h2>Session Dashboard</h2>
+		<div class="stat-grid">
+			<div class="stat-card">
+				<h3>Total Sets</h3>
+				<p id="total-sets">0</p>
+			</div>
+			<div class="stat-card">
+				<h3>Total Drinks</h3>
+				<p id="total-drinks">0</p>
+			</div>
+		</div>
+
+		<h3>Leaderboard</h3>
+		<table id="leaderboard-table">
+			<thead>
+				<tr><th>Rank</th><th>Nickname</th><th>Drinks</th></tr>
+			</thead>
+			<tbody><!-- Filled dynamically --></tbody>
+		</table>
+	</section>
+
+	<!-- ========== ACHIEVEMENTS ========== -->
+	<section id="achievements-section" class="hidden">
+		<h2>Achievements Unlocked 🎉</h2>
+		<ul id="achievements-list"><!-- Filled dynamically --></ul>
+	</section>
+
+	<!-- ========== SESSION LOG ========== -->
+	<section id="log-section" class="hidden">
+		<h2>Session Activity Log</h2>
+		<ul id="log-list"><!-- Filled dynamically --></ul>
+	</section>
+
+	<!-- ========== RESET BUTTON ========== -->
+	<footer class="hidden" id="reset-footer">
+		<button id="reset-btn">🗑️ Reset Session</button>
+		<p class="note">(Session auto‑resets after 24 h.)</p>
+	</footer>
+
+	<!-- Link to JavaScript -->
+	<script src="script.js"></script>
+</body>
+</html>
