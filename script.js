@@ -4,9 +4,8 @@
 -------------------------------------------------- */
 
 /* ------------------ Global Session Data ------------------ */
-const STORAGE_KEY = 'WDWD_session_v1';
+const API_URL = '';
 const FIVE_MIN   = 5 * 60 * 1000;
-const DAY_MS     = 24 * 60 * 60 * 1000;
 
 let session = {
         startTime: Date.now(),
@@ -20,25 +19,22 @@ let session = {
 let manageVisible = false;
 
 /* ------------------ Helper Functions ------------------ */
-function saveSession() {
-	localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+async function saveSession() {
+        await fetch(`${API_URL}/session`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(session)
+        });
 }
-function loadSession() {
-	const raw = localStorage.getItem(STORAGE_KEY);
-	if (!raw) return;  // Nothing saved yet
-	try {
-		const data = JSON.parse(raw);
-		// Auto‑reset after 24 hours
-		if (Date.now() - data.startTime >= DAY_MS) {
-			localStorage.removeItem(STORAGE_KEY);
-		} else {
-			session = data;
-		}
-	} catch { /* Ignore corrupted data */ }
+async function loadSession() {
+        const res = await fetch(`${API_URL}/session`);
+        if (res.ok) {
+                session = await res.json();
+        }
 }
 function resetSession() {
-	localStorage.removeItem(STORAGE_KEY);
-	location.reload(); // Simplest way to reset UI
+        fetch(`${API_URL}/reset`, { method: 'POST' })
+                .then(() => location.reload());
 }
 function log(msg) {
 	session.log.unshift(`${new Date().toLocaleTimeString()} – ${msg}`);
@@ -99,8 +95,10 @@ const ACHIEVEMENTS = [
 ];
 
 /* ------------------ Initialization ------------------ */
-loadSession();
-updateUI();
+(async () => {
+        await loadSession();
+        updateUI();
+})();
 
 /* ------------------ Event Listeners ------------------ */
 // 1) Join / Add User
