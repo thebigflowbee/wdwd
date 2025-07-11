@@ -1,0 +1,4 @@
+node_modules/
+current_session.json
+session_archive.json
+/tmp/
