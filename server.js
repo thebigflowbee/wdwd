@@ -1,7 +1,13 @@
 const fs = require('fs');
+const path = require('path');
 const express = require('express');
 const app = express();
 app.use(express.json());
+// Serve the frontend files so clients can load the app remotely
+app.use(express.static(__dirname));
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
 const PORT = process.env.PORT || 3000;
 
 const DAY_MS = 24 * 60 * 60 * 1000;
